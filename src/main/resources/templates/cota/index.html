@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head> 
+<!-- Latest compiled and minified CSS -->
+<!-- Compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+        
+
+<style type="text/css" media="all">
+.cor{
+    background-color: aquamarine;
+}
+.layout{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.metade{
+    width:100%;
+    color: azure;
+}
+.caixa{
+    color: azure;
+    font-size: 35px;;
+}
+</style>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+angular.module('myApp', [])
+.controller('myCtrl', ['$scope','$http', function($scope,$http) {
+    $scope.valorRealDolar = '';
+    $scope.valorDolarReal = '';
+    $scope.realparadolarFunc = function() {
+
+    var validar=$scope.realDolar;
+    
+    if(isNaN(validar)){
+        return false
+    }
+
+
+    $http({
+    method: 'GET',
+    url: '/Rd'
+    }).then(function successCallback(response) {
+    response=response.data;
+    response=response.replace('<tr>','');
+    response=response.replace('</tr>','');  
+    response=response.replace('<td>',''); 
+    response=response.replace('</td>','');
+    var cota=$scope.realDolar;
+    response=response*cota;
+    response=response.toFixed(2);
+    $scope.valorRealDolar="US$"+response;  
+    }, function errorCallback(response) {
+
+   });
+    };
+
+
+    $scope.dolarpararealFunc = function() {
+
+
+    var validar=$scope.dolarReal;
+    
+    if(isNaN(validar)){
+        return false
+    }
+
+
+    $http({
+    method: 'GET',
+    url: '/Dr'
+    }).then(function successCallback(response) {
+    response=response.data;
+    response=response.replace('<tr>','');
+    response=response.replace('</tr>','');  
+    response=response.replace('<td>',''); 
+    response=response.replace('</td>','');
+    var cota=$scope.dolarReal ;
+    response=response*cota;
+    response=response.toFixed(2);
+    $scope.valorDolarReal ="R$"+response;  
+    }, function errorCallback(response) {
+
+   });
+    };
+
+
+
+
+
+
+}]);
+
+</script>
+
+
+
+
+</head>
+<body ng-app="myApp">
+    <nav>
+        <div class="nav-wrapper cor">
+          <a href="#" class="brand-logo center">Câmbio</a>
+        </div>
+      </nav>
+    <div ng-controller="myCtrl">
+
+       <div class="layout">
+        <div class="row metade">
+            <div class="col s12 m6">
+              <div class="card blue-grey darken-1">
+                <div class="card-content white-text">
+                  <span class="card-title">Real => Dolar</span>
+                  <p><input class="caixa" type="text" placeholder="R$" ng-change="realparadolarFunc()" ng-model="realDolar" /></p>
+                  <p>{{valorRealDolar}}</p>
+                </div>
+                </div>
+            </div>
+          </div>
+
+
+
+          <div class="row metade">
+            <div class="col s12 m6">
+              <div class="card blue-grey darken-1">
+                <div class="card-content white-text">
+                  <span class="card-title">Dolar => Real</span>
+                  <p><input placeholder="US$"  class="caixa" type="text" ng-change="dolarpararealFunc()" ng-model="dolarReal" /></p>
+                  <p>{{valorDolarReal}}</p>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+               
+
+
+
+
+     </div>
+</body>
+</html>
